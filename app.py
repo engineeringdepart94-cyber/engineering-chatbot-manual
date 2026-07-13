@@ -236,20 +236,17 @@ for msg in st.session_state.messages:
         if msg["role"] == "assistant" and msg.get("pages"):
             pages_used = msg["pages"]
 
-            # Sirf 14-113 range wale pages ki drawings upload hui hain (baaki
-            # sirf text/title pages hain, unki images jaan-boojh kar nahi
-            # daali gayin). Retrieved pages mein se pehli aisi page dhoondte
-            # hain jiski drawing maujood ho.
-            shown_image_page = None
-            for p in pages_used:
-                candidate_path = f"data/pages/page_{p}.jpg"
-                if os.path.exists(candidate_path):
-                    shown_image_page = p
-                    break
+            # Sirf SABSE ZYADA relevant page (top match) ki image dikhate
+            # hain — agar wahi page ki drawing na mile, to koi bhi aur
+            # (kam relevant) page ki image NAHI dikhate, chahe wo available
+            # kyun na ho. Warna galat/na-related drawing dikhne ka khatra
+            # rehta hai (jaise 'canteen' sawal par 'wooden cabinet' dikhna).
+            top_page = pages_used[0] if pages_used else None
+            img_path = f"data/pages/page_{top_page}.jpg" if top_page else None
 
-            if shown_image_page:
-                st.caption(f"📄 Drawing reference: Page {shown_image_page}")
-                st.image(f"data/pages/page_{shown_image_page}.jpg", use_container_width=True)
+            if img_path and os.path.exists(img_path):
+                st.caption(f"📄 Drawing reference: Page {top_page}")
+                st.image(img_path, use_container_width=True)
 
             st.caption(f"Source page(s): {', '.join(str(p) for p in pages_used[:4])}")
 
