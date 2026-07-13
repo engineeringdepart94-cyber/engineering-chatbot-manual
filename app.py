@@ -54,6 +54,17 @@ stt_model = load_whisper_model()
 # Helper functions
 # ---------------------------------------------------------------
 
+def is_low_value_chunk(text):
+    """Kuch pages (jaise Table of Contents, index) sirf headings ki list hoti
+    hain — inmein keywords bohat zyada density se milte hain (e.g. 'Boundary
+    Wall (Block)', 'Boundary Wall (Brick)' lagataar likhe hote hain) lekin
+    asal detail/specs is page par nahi hoti. Aise chunks ko hum search se
+    bahar rakhte hain taake yeh galti se 'sabse relevant page' na ban jayen."""
+    lowered = text.lower()
+    skip_markers = ["table of contents", "list of illustrations", "list of figures"]
+    return any(marker in lowered for marker in skip_markers)
+
+
 def keyword_search_chunks(query, top_n=6):
     """Exact keyword matching, jaisay pehle wali app mein — sirf ab har
     chunk 'text' aur 'page' dono rakhta hai."""
@@ -62,6 +73,8 @@ def keyword_search_chunks(query, top_n=6):
         return []
     scored = []
     for i, c in enumerate(chunk_data):
+        if is_low_value_chunk(c["text"]):
+            continue
         chunk_lower = c["text"].lower()
         distinct_hits = sum(1 for w in words if w in chunk_lower)
         if distinct_hits == 0:
@@ -77,7 +90,7 @@ def get_relevant_chunks(query, k=6):
     karta hai taake page number bhi pata rahe."""
     query_embedding = embedder.encode([query])
     distances, indices = index.search(np.array(query_embedding), k)
-    semantic_indices = list(indices[0])
+    semantic_indices = [i for i in indices[0] if not is_low_value_chunk(chunk_data[i]["text"])]
 
     keyword_indices = keyword_search_chunks(query, top_n=6)
 
