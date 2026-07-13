@@ -1,0 +1,8 @@
+streamlit
+groq
+sentence-transformers
+faiss-cpu
+gTTS
+faster-whisper
+streamlit-mic-recorder
+numpy
