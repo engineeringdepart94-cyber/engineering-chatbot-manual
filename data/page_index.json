@@ -1,0 +1,567 @@
+[
+  {
+    "page": 1,
+    "topic": "Title (TCF)",
+    "has_drawing": false
+  },
+  {
+    "page": 2,
+    "topic": "Preface",
+    "has_drawing": false
+  },
+  {
+    "page": 3,
+    "topic": "Table of contents",
+    "has_drawing": false
+  },
+  {
+    "page": 4,
+    "topic": "Table of contents",
+    "has_drawing": false
+  },
+  {
+    "page": 5,
+    "topic": "Objective",
+    "has_drawing": false
+  },
+  {
+    "page": 6,
+    "topic": "Objective",
+    "has_drawing": false
+  },
+  {
+    "page": 7,
+    "topic": "Design criteria",
+    "has_drawing": false
+  },
+  {
+    "page": 8,
+    "topic": "Design philosophy",
+    "has_drawing": false
+  },
+  {
+    "page": 9,
+    "topic": "Construction standard",
+    "has_drawing": false
+  },
+  {
+    "page": 10,
+    "topic": "Construction standard",
+    "has_drawing": false
+  },
+  {
+    "page": 11,
+    "topic": "Construction standard",
+    "has_drawing": false
+  },
+  {
+    "page": 12,
+    "topic": "Layout consideration",
+    "has_drawing": false
+  },
+  {
+    "page": 13,
+    "topic": "Illustrations",
+    "has_drawing": false
+  },
+  {
+    "page": 14,
+    "topic": "Boundary wall block pic",
+    "has_drawing": false
+  },
+  {
+    "page": 15,
+    "topic": "Boundary wall block",
+    "has_drawing": true
+  },
+  {
+    "page": 16,
+    "topic": "Boundary wall Brick pic",
+    "has_drawing": false
+  },
+  {
+    "page": 17,
+    "topic": "Boundary wall Brick",
+    "has_drawing": true
+  },
+  {
+    "page": 18,
+    "topic": "Boundary wall North pic",
+    "has_drawing": false
+  },
+  {
+    "page": 19,
+    "topic": "Boundary wall North",
+    "has_drawing": true
+  },
+  {
+    "page": 20,
+    "topic": "Boundary wall for inclined areas pic",
+    "has_drawing": false
+  },
+  {
+    "page": 21,
+    "topic": "Boundary wall for inclined areas",
+    "has_drawing": true
+  },
+  {
+    "page": 22,
+    "topic": "Main gate pic",
+    "has_drawing": false
+  },
+  {
+    "page": 23,
+    "topic": "Main gate",
+    "has_drawing": true
+  },
+  {
+    "page": 24,
+    "topic": "Main gate north pic",
+    "has_drawing": false
+  },
+  {
+    "page": 25,
+    "topic": "Main gate north",
+    "has_drawing": true
+  },
+  {
+    "page": 26,
+    "topic": "Guard room pic",
+    "has_drawing": false
+  },
+  {
+    "page": 27,
+    "topic": "Guard room",
+    "has_drawing": true
+  },
+  {
+    "page": 28,
+    "topic": "Canteen pic",
+    "has_drawing": false
+  },
+  {
+    "page": 29,
+    "topic": "Canteen",
+    "has_drawing": true
+  },
+  {
+    "page": 30,
+    "topic": "Under ground water tank pic",
+    "has_drawing": false
+  },
+  {
+    "page": 31,
+    "topic": "Under ground water tank",
+    "has_drawing": true
+  },
+  {
+    "page": 32,
+    "topic": "Overhead tank pic",
+    "has_drawing": false
+  },
+  {
+    "page": 33,
+    "topic": "Overhead tank",
+    "has_drawing": true
+  },
+  {
+    "page": 34,
+    "topic": "Soak pit pic",
+    "has_drawing": false
+  },
+  {
+    "page": 35,
+    "topic": "Soak pit",
+    "has_drawing": true
+  },
+  {
+    "page": 36,
+    "topic": "Trench pic",
+    "has_drawing": false
+  },
+  {
+    "page": 37,
+    "topic": "Trench",
+    "has_drawing": true
+  },
+  {
+    "page": 38,
+    "topic": "Septic tank pic",
+    "has_drawing": false
+  },
+  {
+    "page": 39,
+    "topic": "Septic tank",
+    "has_drawing": true
+  },
+  {
+    "page": 40,
+    "topic": "External wall detail pic",
+    "has_drawing": false
+  },
+  {
+    "page": 41,
+    "topic": "External wall detail",
+    "has_drawing": true
+  },
+  {
+    "page": 42,
+    "topic": "External wall detail north pic",
+    "has_drawing": false
+  },
+  {
+    "page": 43,
+    "topic": "External wall detail north",
+    "has_drawing": true
+  },
+  {
+    "page": 44,
+    "topic": "Arches pic",
+    "has_drawing": false
+  },
+  {
+    "page": 45,
+    "topic": "Arches",
+    "has_drawing": true
+  },
+  {
+    "page": 46,
+    "topic": "Store pic",
+    "has_drawing": false
+  },
+  {
+    "page": 47,
+    "topic": "Store",
+    "has_drawing": true
+  },
+  {
+    "page": 48,
+    "topic": "Staircase pic",
+    "has_drawing": false
+  },
+  {
+    "page": 49,
+    "topic": "Staircase",
+    "has_drawing": true
+  },
+  {
+    "page": 50,
+    "topic": "Staircase north pic",
+    "has_drawing": false
+  },
+  {
+    "page": 51,
+    "topic": "Staircase north",
+    "has_drawing": true
+  },
+  {
+    "page": 52,
+    "topic": "Pantry pic",
+    "has_drawing": false
+  },
+  {
+    "page": 53,
+    "topic": "Pantry",
+    "has_drawing": true
+  },
+  {
+    "page": 54,
+    "topic": "Toilet & fixture pic",
+    "has_drawing": false
+  },
+  {
+    "page": 55,
+    "topic": "Toilet & fixture",
+    "has_drawing": true
+  },
+  {
+    "page": 56,
+    "topic": "Passage & dado tiles pic",
+    "has_drawing": false
+  },
+  {
+    "page": 57,
+    "topic": "Passage & dado tiles",
+    "has_drawing": true
+  },
+  {
+    "page": 58,
+    "topic": "C.c jali pic",
+    "has_drawing": false
+  },
+  {
+    "page": 59,
+    "topic": "C.c jali",
+    "has_drawing": true
+  },
+  {
+    "page": 60,
+    "topic": "Design wall pic",
+    "has_drawing": false
+  },
+  {
+    "page": 61,
+    "topic": "Design wall",
+    "has_drawing": true
+  },
+  {
+    "page": 62,
+    "topic": "Parapet wall external pic",
+    "has_drawing": false
+  },
+  {
+    "page": 63,
+    "topic": "Parapet wall external",
+    "has_drawing": true
+  },
+  {
+    "page": 64,
+    "topic": "Parapet wall internal pic",
+    "has_drawing": false
+  },
+  {
+    "page": 65,
+    "topic": "Parapet wall internal",
+    "has_drawing": true
+  },
+  {
+    "page": 66,
+    "topic": "Parapet wall north pic",
+    "has_drawing": false
+  },
+  {
+    "page": 67,
+    "topic": "Parapet wall north",
+    "has_drawing": true
+  },
+  {
+    "page": 68,
+    "topic": "Planter pic",
+    "has_drawing": false
+  },
+  {
+    "page": 69,
+    "topic": "Planter",
+    "has_drawing": true
+  },
+  {
+    "page": 70,
+    "topic": "Steel window external pic",
+    "has_drawing": false
+  },
+  {
+    "page": 71,
+    "topic": "Steel window external",
+    "has_drawing": true
+  },
+  {
+    "page": 72,
+    "topic": "Steel window internal pic",
+    "has_drawing": false
+  },
+  {
+    "page": 73,
+    "topic": "Steel window internal",
+    "has_drawing": true
+  },
+  {
+    "page": 74,
+    "topic": "Wooden window external pic",
+    "has_drawing": false
+  },
+  {
+    "page": 75,
+    "topic": "Wooden window external & internal",
+    "has_drawing": true
+  },
+  {
+    "page": 76,
+    "topic": "Wooden window external & internal",
+    "has_drawing": true
+  },
+  {
+    "page": 77,
+    "topic": "Windows north pic",
+    "has_drawing": false
+  },
+  {
+    "page": 78,
+    "topic": "Windows north",
+    "has_drawing": true
+  },
+  {
+    "page": 79,
+    "topic": "flash door pic",
+    "has_drawing": false
+  },
+  {
+    "page": 80,
+    "topic": "flash door",
+    "has_drawing": true
+  },
+  {
+    "page": 81,
+    "topic": "flash door north pic",
+    "has_drawing": false
+  },
+  {
+    "page": 82,
+    "topic": "flash door north",
+    "has_drawing": true
+  },
+  {
+    "page": 83,
+    "topic": "Panel door pic",
+    "has_drawing": false
+  },
+  {
+    "page": 84,
+    "topic": "Panel door",
+    "has_drawing": true
+  },
+  {
+    "page": 85,
+    "topic": "Panel door detail pic",
+    "has_drawing": false
+  },
+  {
+    "page": 86,
+    "topic": "Panel door detail",
+    "has_drawing": true
+  },
+  {
+    "page": 87,
+    "topic": "Lab store door pic",
+    "has_drawing": false
+  },
+  {
+    "page": 88,
+    "topic": "Lab store door",
+    "has_drawing": true
+  },
+  {
+    "page": 89,
+    "topic": "Grill gate pic",
+    "has_drawing": false
+  },
+  {
+    "page": 90,
+    "topic": "Grill gate",
+    "has_drawing": true
+  },
+  {
+    "page": 91,
+    "topic": "Chemistry lab pic",
+    "has_drawing": false
+  },
+  {
+    "page": 92,
+    "topic": "Chemistry lab",
+    "has_drawing": true
+  },
+  {
+    "page": 93,
+    "topic": "Typical class room pic",
+    "has_drawing": false
+  },
+  {
+    "page": 94,
+    "topic": "Typical class room",
+    "has_drawing": true
+  },
+  {
+    "page": 95,
+    "topic": "Green board & soft board pic",
+    "has_drawing": false
+  },
+  {
+    "page": 96,
+    "topic": "Green board & soft board",
+    "has_drawing": true
+  },
+  {
+    "page": 97,
+    "topic": "Wooden cabinets pic",
+    "has_drawing": false
+  },
+  {
+    "page": 98,
+    "topic": "Wooden cabinets",
+    "has_drawing": true
+  },
+  {
+    "page": 99,
+    "topic": "Rain water spout pic",
+    "has_drawing": false
+  },
+  {
+    "page": 100,
+    "topic": "Rain water spout",
+    "has_drawing": true
+  },
+  {
+    "page": 101,
+    "topic": "Rain water pipe pic",
+    "has_drawing": false
+  },
+  {
+    "page": 102,
+    "topic": "Rain water pipe north",
+    "has_drawing": true
+  },
+  {
+    "page": 103,
+    "topic": "walkway & driveway pic",
+    "has_drawing": false
+  },
+  {
+    "page": 104,
+    "topic": "walkway & driveway",
+    "has_drawing": true
+  },
+  {
+    "page": 105,
+    "topic": "Motor room pic",
+    "has_drawing": false
+  },
+  {
+    "page": 106,
+    "topic": "Motor room",
+    "has_drawing": true
+  },
+  {
+    "page": 107,
+    "topic": "Signage pic",
+    "has_drawing": false
+  },
+  {
+    "page": 108,
+    "topic": "Signage",
+    "has_drawing": true
+  },
+  {
+    "page": 109,
+    "topic": "Marble plaque pic",
+    "has_drawing": false
+  },
+  {
+    "page": 110,
+    "topic": "Marble plaque",
+    "has_drawing": true
+  },
+  {
+    "page": 111,
+    "topic": "Plinth protection",
+    "has_drawing": true
+  },
+  {
+    "page": 112,
+    "topic": "Plinth protection north",
+    "has_drawing": true
+  },
+  {
+    "page": 113,
+    "topic": "Miscellaneous items",
+    "has_drawing": true
+  }
+]
