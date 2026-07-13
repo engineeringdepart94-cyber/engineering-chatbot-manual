@@ -67,10 +67,21 @@ def is_low_value_chunk(text):
 
 def keyword_search_chunks(query, top_n=6):
     """Exact keyword matching, jaisay pehle wali app mein — sirf ab har
-    chunk 'text' aur 'page' dono rakhta hai."""
+    chunk 'text' aur 'page' dono rakhta hai.
+
+    Scoring 3 tiers mein: (1) EXACT PHRASE match (jaisay 'boundary wall'
+    poora sath likha ho) sabse zyada bharosemand hai — sabse upar. (2) Kitne
+    ALAG alag query words maujood hain (distinct hits). (3) Total frequency
+    sirf tie-breaker. Isse sirf ek generic lafz (jaisay akela 'block') kisi
+    galat page ko upar nahi le ja sakta agar wahan poora phrase maujood
+    nahi hai."""
     words = list(set(w for w in re.findall(r"[A-Za-z]+", query.lower()) if len(w) > 2))
     if not words:
         return []
+
+    ordered_words = re.findall(r"[A-Za-z]+", query.lower())
+    phrases = [f"{ordered_words[i]} {ordered_words[i+1]}" for i in range(len(ordered_words) - 1)]
+
     scored = []
     for i, c in enumerate(chunk_data):
         if is_low_value_chunk(c["text"]):
@@ -79,10 +90,11 @@ def keyword_search_chunks(query, top_n=6):
         distinct_hits = sum(1 for w in words if w in chunk_lower)
         if distinct_hits == 0:
             continue
+        phrase_hits = sum(1 for p in phrases if p in chunk_lower)
         total_count = sum(chunk_lower.count(w) for w in words)
-        scored.append((distinct_hits, total_count, i))
+        scored.append((phrase_hits, distinct_hits, total_count, i))
     scored.sort(reverse=True)
-    return [i for _, _, i in scored[:top_n]]
+    return [i for *_, i in scored[:top_n]]
 
 
 def get_relevant_chunks(query, k=6):
@@ -222,16 +234,24 @@ for msg in st.session_state.messages:
         if msg["role"] == "assistant" and "audio" in msg:
             st.audio(msg["audio"], format="audio/mp3")
         if msg["role"] == "assistant" and msg.get("pages"):
-            top_page = msg["pages"][0]
-            other_pages = msg["pages"][1:4]  # baaki pages sirf naam se, image nahi (clutter na ho)
-            img_path = f"data/pages/page_{top_page}.jpg"
-            st.caption(f"📄 Found on Page {top_page}")
-            if os.path.exists(img_path):
-                st.image(img_path, use_container_width=True)
-            else:
-                st.warning(f"⚠️ Page image not found at: {img_path} (check this file exists in the GitHub repo)")
-            if other_pages:
-                st.caption(f"Also mentioned on page(s): {', '.join(str(p) for p in other_pages)}")
+            pages_used = msg["pages"]
+
+            # Sirf 14-113 range wale pages ki drawings upload hui hain (baaki
+            # sirf text/title pages hain, unki images jaan-boojh kar nahi
+            # daali gayin). Retrieved pages mein se pehli aisi page dhoondte
+            # hain jiski drawing maujood ho.
+            shown_image_page = None
+            for p in pages_used:
+                candidate_path = f"data/pages/page_{p}.jpg"
+                if os.path.exists(candidate_path):
+                    shown_image_page = p
+                    break
+
+            if shown_image_page:
+                st.caption(f"📄 Drawing reference: Page {shown_image_page}")
+                st.image(f"data/pages/page_{shown_image_page}.jpg", use_container_width=True)
+
+            st.caption(f"Source page(s): {', '.join(str(p) for p in pages_used[:4])}")
 
 st.divider()
 st.write("🎤 Ask by voice:")
