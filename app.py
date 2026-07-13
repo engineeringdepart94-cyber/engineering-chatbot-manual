@@ -31,6 +31,18 @@ def load_chunks_and_index():
     return chunk_data, index
 
 
+@st.cache_resource(show_spinner="Loading page index...")
+def load_page_index():
+    """Insaan ne khud har page ka topic likha hai (Excel se banaya gaya) —
+    yeh sabse zyada bharosemand tareeqa hai sahi page dhoondne ka, kyunke
+    AI ke guess/OCR noise par depend nahi karta."""
+    path = "data/page_index.json"
+    if not os.path.exists(path):
+        return []
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 @st.cache_resource(show_spinner="Connecting to AI...")
 def load_groq_client():
     api_key = st.secrets.get("GROQ_API_KEY", os.environ.get("GROQ_API_KEY", ""))
@@ -47,6 +59,7 @@ def load_whisper_model():
 
 embedder = load_embedder()
 chunk_data, index = load_chunks_and_index()
+page_index = load_page_index()
 client = load_groq_client()
 stt_model = load_whisper_model()
 
@@ -97,6 +110,58 @@ def keyword_search_chunks(query, top_n=6):
     return [i for *_, i in scored[:top_n]]
 
 
+def find_manual_page_match(query):
+    """Insaan ke likhe hue 'Page Index' (Excel se) mein query ke alfaz
+    dhoondta hai. Yeh topic descriptions bohat chote aur saaf hain (OCR
+    noise nahi), is liye yahan match milna sabse zyada bharosemand hai.
+
+    'Y' (asal drawing/measurements wala page) ko hamesha priority dete hain
+    'N' (sirf photo) par — kyunke sawal poochne wale ko aksar specs/details
+    chahiye hoti hain, tasveer nahi. Agar sirf photo match mila, to uska
+    juda hua detail page (aik page aagay, usi topic ka) bhi dhoondte hain."""
+    if not page_index:
+        return None
+
+    words = list(set(w for w in re.findall(r"[A-Za-z]+", query.lower()) if len(w) > 2))
+    if not words:
+        return None
+
+    ordered_words = re.findall(r"[A-Za-z]+", query.lower())
+    phrases = [f"{ordered_words[i]} {ordered_words[i+1]}" for i in range(len(ordered_words) - 1)]
+
+    scored = []
+    for entry in page_index:
+        topic_lower = entry["topic"].lower()
+        distinct_hits = sum(1 for w in words if w in topic_lower)
+        if distinct_hits == 0:
+            continue
+        phrase_hits = sum(1 for p in phrases if p in topic_lower)
+        scored.append((phrase_hits, distinct_hits, entry))
+    scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
+
+    if not scored:
+        return None
+
+    # Y (drawing/detail) wale matches ko upar rakhte hain
+    y_matches = [e for _, _, e in scored if e["has_drawing"]]
+    n_matches = [e for _, _, e in scored if not e["has_drawing"]]
+
+    if y_matches:
+        return y_matches[0]
+
+    if n_matches:
+        # Sirf photo mila — uska juda hua detail (Y) page dhoondte hain
+        # (pattern: pic page ke theek baad wala page usi topic ka detail hai)
+        pic_entry = n_matches[0]
+        next_page = pic_entry["page"] + 1
+        for entry in page_index:
+            if entry["page"] == next_page and entry["has_drawing"]:
+                return entry
+        return pic_entry
+
+    return None
+
+
 def get_relevant_chunks(query, k=6):
     """Ab yeh sirf text nahi, poora chunk dict ({"text", "page"}) return
     karta hai taake page number bhi pata rahe."""
@@ -121,15 +186,26 @@ def get_relevant_chunks(query, k=6):
 
 def ask_ai(user_question, retrieval_query=None):
     query_for_search = retrieval_query if retrieval_query else user_question
-    matched_chunks = get_relevant_chunks(query_for_search)
-    context = "\n\n".join(c["text"] for c in matched_chunks)
 
-    # Sab pages jahan se context liya gaya, order preserve karte hue
-    # (pehla page = sabse zyada relevant match)
-    pages_used = []
-    for c in matched_chunks:
-        if c["page"] not in pages_used:
-            pages_used.append(c["page"])
+    # STEP 1: Pehle manual (insaan ke likhe hue) Page Index mein dhoondein —
+    # yeh sabse reliable hai. Agar match mil jaye, isi page ka OCR text
+    # context ke liye use karte hain (guaranteed sahi page).
+    manual_match = find_manual_page_match(query_for_search)
+
+    if manual_match:
+        matched_page = manual_match["page"]
+        matched_chunks = [c for c in chunk_data if c["page"] == matched_page]
+        pages_used = [matched_page]
+    else:
+        # STEP 2: Manual index mein match nahi mila — purani AI-based
+        # hybrid (keyword + semantic) search par fallback karte hain.
+        matched_chunks = get_relevant_chunks(query_for_search)
+        pages_used = []
+        for c in matched_chunks:
+            if c["page"] not in pages_used:
+                pages_used.append(c["page"])
+
+    context = "\n\n".join(c["text"] for c in matched_chunks)
 
     system_prompt = (
         "Tum ek engineering assistant ho. Sirf diye gaye context se jawab do. "
