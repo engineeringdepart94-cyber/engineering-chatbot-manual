@@ -236,17 +236,21 @@ for msg in st.session_state.messages:
         if msg["role"] == "assistant" and msg.get("pages"):
             pages_used = msg["pages"]
 
-            # Sirf SABSE ZYADA relevant page (top match) ki image dikhate
-            # hain — agar wahi page ki drawing na mile, to koi bhi aur
-            # (kam relevant) page ki image NAHI dikhate, chahe wo available
-            # kyun na ho. Warna galat/na-related drawing dikhne ka khatra
-            # rehta hai (jaise 'canteen' sawal par 'wooden cabinet' dikhna).
-            top_page = pages_used[0] if pages_used else None
-            img_path = f"data/pages/page_{top_page}.jpg" if top_page else None
+            # Sirf TOP 2 sabse relevant pages mein se image dhoondte hain
+            # (poori list mein nahi) — taake dono cheezein balance hon:
+            # (1) agar sabse top page ki drawing na ho to bhi 2nd-most
+            # relevant page try ho jaye, (2) lekin list ke aakhri (kam
+            # relevant) pages ki galat/na-related image kabhi na dikhe.
+            shown_image_page = None
+            for p in pages_used[:2]:
+                candidate_path = f"data/pages/page_{p}.jpg"
+                if os.path.exists(candidate_path):
+                    shown_image_page = p
+                    break
 
-            if img_path and os.path.exists(img_path):
-                st.caption(f"📄 Drawing reference: Page {top_page}")
-                st.image(img_path, use_container_width=True)
+            if shown_image_page:
+                st.caption(f"📄 Drawing reference: Page {shown_image_page}")
+                st.image(f"data/pages/page_{shown_image_page}.jpg", use_container_width=True)
 
             st.caption(f"Source page(s): {', '.join(str(p) for p in pages_used[:4])}")
 
