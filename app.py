@@ -212,9 +212,11 @@ for msg in st.session_state.messages:
             top_page = msg["pages"][0]
             other_pages = msg["pages"][1:4]  # baaki pages sirf naam se, image nahi (clutter na ho)
             img_path = f"data/pages/page_{top_page}.jpg"
+            st.caption(f"📄 Found on Page {top_page}")
             if os.path.exists(img_path):
-                st.caption(f"📄 Found on Page {top_page}")
                 st.image(img_path, use_container_width=True)
+            else:
+                st.warning(f"⚠️ Page image not found at: {img_path} (check this file exists in the GitHub repo)")
             if other_pages:
                 st.caption(f"Also mentioned on page(s): {', '.join(str(p) for p in other_pages)}")
 
