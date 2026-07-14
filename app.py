@@ -57,11 +57,25 @@ def load_whisper_model():
     return WhisperModel("small", device="cpu", compute_type="int8")
 
 
-embedder = load_embedder()
+# Sirf halki/tez cheezein app khulte hi load karte hain (JSON files, API
+# client). Bhari AI models (embedding, voice recognition) ko JAAN-BOOJH
+# KAR yahan load NAHI karte — warna app tab tak kuch nahi dikhati jab tak
+# yeh dono load na ho jayen (jo Streamlit Cloud ke free/limited resources
+# par bohat der lag sakti hai, kabhi kabhi hang bhi ho sakta hai). Inhein
+# neeche 'get_embedder()' aur 'get_stt_model()' se sirf USI waqt load
+# karte hain jab pehli baar zaroorat pade — is se interface turant khulta
+# hai, aur AI model sirf tab load hota hai jab wakai use ho raha ho.
 chunk_data, index = load_chunks_and_index()
 page_index = load_page_index()
 client = load_groq_client()
-stt_model = load_whisper_model()
+
+
+def get_embedder():
+    return load_embedder()
+
+
+def get_stt_model():
+    return load_whisper_model()
 
 # ---------------------------------------------------------------
 # Helper functions
@@ -165,6 +179,7 @@ def find_manual_page_match(query):
 def get_relevant_chunks(query, k=6):
     """Ab yeh sirf text nahi, poora chunk dict ({"text", "page"}) return
     karta hai taake page number bhi pata rahe."""
+    embedder = get_embedder()
     query_embedding = embedder.encode([query])
     distances, indices = index.search(np.array(query_embedding), k)
     semantic_indices = [i for i in indices[0] if not is_low_value_chunk(chunk_data[i]["text"])]
@@ -286,6 +301,7 @@ def generate_voice(text):
 
 
 def transcribe_audio_bytes(audio_bytes):
+    stt_model = get_stt_model()
     tmp_path = tempfile.NamedTemporaryFile(delete=False, suffix=".wav").name
     with open(tmp_path, "wb") as f:
         f.write(audio_bytes)
