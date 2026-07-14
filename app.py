@@ -188,9 +188,15 @@ def ask_ai(user_question, retrieval_query=None):
     query_for_search = retrieval_query if retrieval_query else user_question
 
     # STEP 1: Pehle manual (insaan ke likhe hue) Page Index mein dhoondein —
-    # yeh sabse reliable hai. Agar match mil jaye, isi page ka OCR text
-    # context ke liye use karte hain (guaranteed sahi page).
-    manual_match = find_manual_page_match(query_for_search)
+    # yeh sabse reliable hai. RAW sawal (jaisa likha/bola gaya, bina AI se
+    # 'clean' karwaye) se PEHLE try karte hain — kyunke AI cleaning step
+    # kabhi kabhi lafz badal deta hai (jaise 'walkway' ko kisi aur lafz mein
+    # rephrase kar dena), jo hamari saaf Excel list se match nahi karta.
+    # Sirf agar raw text se match na mile (jaise Urdu/Roman Urdu awaaz),
+    # tab translated/cleaned version try karte hain.
+    manual_match = find_manual_page_match(user_question)
+    if not manual_match and retrieval_query:
+        manual_match = find_manual_page_match(retrieval_query)
 
     if manual_match:
         matched_page = manual_match["page"]
@@ -238,15 +244,22 @@ def ask_ai(user_question, retrieval_query=None):
 
 
 def get_search_query(user_question):
+    """Voice/text sawal ko English mein translate karta hai taake search ho
+    sake. Jaan-boojh kar sirf 'literal translation' maangte hain (summarize
+    ya 'core topic nikalna' nahi) — kyunke translate+summarize dono ek sath
+    karne se chota/tez model kabhi kabhi topic hi badal deta hai (jaise
+    'toilet' ko 'pantry' samajh lena). Filler words hata dena hamari apni
+    matching logic khud sambhal leti hai, LLM se yeh na karwana zyada
+    reliable hai."""
     try:
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[
                 {"role": "system", "content": (
-                    "Extract only the core technical/engineering topic being asked about, "
-                    "in English, as a short search phrase (2-6 words). "
-                    "Remove filler words like 'batao', 'tell me', 'what is', 'detail', 'kya hai', 'please'. "
-                    "Reply with ONLY the search phrase, nothing else."
+                    "Translate the user's message to English, word for word, as literally and "
+                    "accurately as possible. If it is already in English, repeat it unchanged. "
+                    "Do NOT summarize, paraphrase, explain, or change the meaning. "
+                    "Reply with ONLY the direct English translation, nothing else."
                 )},
                 {"role": "user", "content": user_question},
             ],
