@@ -124,6 +124,20 @@ def keyword_search_chunks(query, top_n=6):
     return [i for *_, i in scored[:top_n]]
 
 
+# Yeh alfaz bohat generic hain — kai alag alag topics mein bhi likhe hote
+# hain (jaise 'External wall DETAIL', 'Main gate DETAIL'), is liye inhein
+# match karte waqt IGNORE karte hain, warna galat topic se tie/confuse ho
+# sakta hai (jaise 'toilet ki detail' -> 'detail' lafz kisi bhi doosre
+# 'detail' wale page se match kar ke galat jagah le jata hai).
+FILLER_WORDS = {
+    "the", "and", "for", "with", "detail", "details", "please", "share",
+    "tell", "give", "know", "picture", "pic", "pics", "photo", "photos",
+    "image", "images", "batao", "chahiye", "kya", "hai", "mujhe", "mein",
+    "dikhao", "bolo", "what", "how", "about", "sawal", "poochna", "wala",
+    "wali", "waghera",
+}
+
+
 def find_manual_page_match(query):
     """Insaan ke likhe hue 'Page Index' (Excel se) mein query ke alfaz
     dhoondta hai. Yeh topic descriptions bohat chote aur saaf hain (OCR
@@ -136,7 +150,10 @@ def find_manual_page_match(query):
     if not page_index:
         return None
 
-    words = list(set(w for w in re.findall(r"[A-Za-z]+", query.lower()) if len(w) > 2))
+    words = list(set(
+        w for w in re.findall(r"[A-Za-z]+", query.lower())
+        if len(w) > 2 and w not in FILLER_WORDS
+    ))
     if not words:
         return None
 
